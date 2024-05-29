@@ -1,0 +1,6 @@
+%script{ type: "text/ng-template", id: "account/user_available_discount.html" }
+
+  - if @user.discount.present?
+    %p= t('discount_available', amount: @user.discount)
+  - else
+    %p= t('no_discount')
