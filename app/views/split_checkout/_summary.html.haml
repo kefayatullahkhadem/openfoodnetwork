@@ -82,12 +82,20 @@
 
   .summary-right{ "data-controller": "sticky", "data-sticky-target": "container" }
     .summary-right-line.total
+    - if @user.discount.present? && @user.discount > 0
+      .total-two{style: "display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;"}
+        .summary-right-line-label= t :order_sub_total_price
+        .summary-right-line-value#order_total= display_checkout_subtotal(@order)
+      .total-two{style: "display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;"}
+        .summary-right-line-label= t :discount
+        .summary-right-line-value#order_total= @user.discount
+    .total-two{style: "display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;"}
       .summary-right-line-label= t :order_total_price
       .summary-right-line-value#order_total= @order.display_total.to_html
 
-    .summary-right-line
-      .summary-right-line-label= t :order_produce
-      .summary-right-line-value= display_checkout_subtotal(@order)
+    -# .summary-right-line
+    -#   .summary-right-line-label= t :order_produce
+    -#   .summary-right-line-value= display_checkout_subtotal(@order)
 
     - checkout_adjustments_for(@order, exclude: [:line_item]).reverse_each do |adjustment|
       .summary-right-line

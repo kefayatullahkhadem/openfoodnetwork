@@ -44,6 +44,7 @@ module Spree
         end
 
         if @user.update(user_params)
+          DiscountMailer.discount_email(@user).deliver_now
           if roles
             @user.spree_roles = roles.reject(&:blank?).collect{ |r| Spree::Role.find(r) }
           end

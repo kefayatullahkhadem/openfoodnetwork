@@ -27,6 +27,9 @@
     = f.field_container :enterprise_limit do
       = f.label :enterprise_limit, t(".enterprise_limit")
       = f.text_field :enterprise_limit, class: "fullwidth"
+    = f.field_container :discount do
+      = f.label :discount, t(".discount")
+      = f.number_field :discount, class: "fullwidth", min: 1
   .omega.five.columns
     = f.field_container :password do
       = f.label :password, t(".password")

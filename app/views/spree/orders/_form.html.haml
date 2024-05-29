@@ -31,6 +31,13 @@
             %span.order-total.item-total= display_checkout_subtotal(@order)
           %td
 
+        %tr
+          %td.text-right{colspan:"3"}
+            = t :discount
+          %td.text-right
+            %span.order-total.item-total= @order.discount
+          %td
+
         - checkout_adjustments_for(@order, exclude: [:line_item]).reverse_each do |adjustment|
           %tr.order-adjustment
             %td.text-right{:colspan => "3"}
