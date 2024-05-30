@@ -29,7 +29,9 @@ module Spree
       hide_ofn_navigation(@order.distributor)
     end
 
-    def show; end
+    def show
+      @user = spree_current_user
+    end
 
     def empty
       if @order = current_order

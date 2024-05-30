@@ -199,7 +199,13 @@ module Spree
     end
 
     def display_total
-      Spree::Money.new(total, currency: currency)
+      user = self.user
+      if user.present? && (user.discount.present? || self.discount.present?)
+        available_discount = user.discount || self.discount
+        Spree::Money.new(total - available_discount, currency: currency)
+      else
+        Spree::Money.new(total, currency: currency)
+      end
     end
 
     def to_param

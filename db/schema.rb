@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_09_074343) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_29_080748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -571,6 +571,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_09_074343) do
     t.decimal "included_tax_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "additional_tax_total", precision: 10, scale: 2, default: "0.0", null: false
     t.string "note", default: "", null: false
+    t.integer "discount"
     t.index ["completed_at", "user_id", "created_by_id", "created_at"], name: "spree_orders_completed_at_user_id_created_by_id_created_at_idx"
     t.index ["customer_id"], name: "index_spree_orders_on_customer_id"
     t.index ["distributor_id"], name: "index_spree_orders_on_distributor_id"
@@ -928,6 +929,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_09_074343) do
     t.string "phone", limit: 255
     t.string "name"
     t.string "request_token"
+    t.integer "discount"
     t.index ["confirmation_token"], name: "index_spree_users_on_confirmation_token", unique: true
     t.index ["email"], name: "email_idx_unique", unique: true
     t.index ["persistence_token"], name: "index_users_on_persistence_token"

@@ -32,6 +32,7 @@ module OrderManagement
           update_payment_state
           update_shipments
           update_shipment_state
+          update_user_discount
         end
 
         persist_totals
@@ -82,8 +83,8 @@ module OrderManagement
         order.total = order.item_total + order.adjustment_total
       end
 
-      def persist_totals
-        order.update_columns(
+      def persist_totals        
+        attributes = {
           payment_state: order.payment_state,
           shipment_state: order.shipment_state,
           item_total: order.item_total,
@@ -93,7 +94,13 @@ module OrderManagement
           payment_total: order.payment_total,
           total: order.total,
           updated_at: Time.zone.now
-        )
+        }
+        
+        if order.complete? && order.user.discount.present?
+          attributes[:discount] = order.user.discount
+        end
+        
+        order.update_columns(attributes)
       end
 
       # Updates the +shipment_state+ attribute according to the following logic:
@@ -117,6 +124,13 @@ module OrderManagement
         order.shipment_state
       end
 
+      def update_user_discount        
+        user = @order.user
+        if user
+          user.discount = nil
+          user.save
+        end
+      end
       # Updates the +payment_state+ attribute according to the following logic:
       #
       # - paid - when +payment_total+ is equal to +total+

@@ -23,6 +23,7 @@ class SplitCheckoutController < ::BaseController
   before_action :hide_ofn_navigation, only: [:edit, :update]
 
   def edit
+    @user = spree_current_user
     redirect_to_step_based_on_order unless params[:step]
     check_step if params[:step]
 

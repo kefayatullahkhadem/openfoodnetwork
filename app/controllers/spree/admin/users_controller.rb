@@ -43,7 +43,13 @@ module Spree
           roles = params[:user].delete("spree_role_ids")
         end
 
+        old_discount = @user.discount
         if @user.update(user_params)
+          
+          if @user.discount != old_discount
+            DiscountMailer.discount_email(@user).deliver_now
+          end
+
           if roles
             @user.spree_roles = roles.reject(&:blank?).collect{ |r| Spree::Role.find(r) }
           end
