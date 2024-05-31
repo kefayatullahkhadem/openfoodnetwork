@@ -8,11 +8,11 @@ module Api
       has_many :permissions
 
       def parent_name
-        object.parent.name
+        object&.parent&.name
       end
 
       def child_name
-        object.child.name
+        object&.child&.name
       end
     end
   end

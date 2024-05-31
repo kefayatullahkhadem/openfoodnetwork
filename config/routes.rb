@@ -113,8 +113,6 @@ Openfoodnetwork::Application.routes.draw do
   post 'embedded_shopfront/enable', to: 'application#enable_embedded_styles'
   post 'embedded_shopfront/disable', to: 'application#disable_embedded_styles'
 
-  resources :users
-
   resources :enterprises do
     collection do
       post :search
