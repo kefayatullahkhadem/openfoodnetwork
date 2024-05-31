@@ -169,7 +169,7 @@ module Spree
       if self[:tax_category_id].nil?
         TaxCategory.find_by(is_default: true)
       else
-        TaxCategory.find(self[:tax_category_id])
+        TaxCategory.find_by(id: self[:tax_category_id])
       end
     end
 
