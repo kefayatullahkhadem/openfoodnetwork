@@ -1,11 +1,21 @@
-.order-cycle-bar.hide-for-large-up
-  = render partial: "shopping_shared/order_cycles"
+- unless @authrized
+  .content{ "darker-background" => true }
+    .row.footer-pad
+      .small-12.columns{ "data-controller": "login-modal" }
+        %strong
+          = t 'shop.messages.customer_required.require_customer_login'
+        %p
+          = t('shop.messages.customer_required.require_customer_html', contact: link_to(t('.contact'), contact_us_path), enterprise: '')
 
-%div{"ng-controller" => "ProductsCtrl"}
-  - if no_open_order_cycles?
-    = render partial: "shop/messages/closed_shop"      
-  - else
-    = render partial: "shop/messages/select_oc"
+- else 
+  .order-cycle-bar.hide-for-large-up
+    = render partial: "shopping_shared/order_cycles"
 
-  -# Rendering the form, even if there are no open OCs, makes display only shops possible
-  = render partial: "shop/products/form"
+  %div{"ng-controller" => "ProductsCtrl"}
+    - if no_open_order_cycles?
+      = render partial: "shop/messages/closed_shop"      
+    - else
+      = render partial: "shop/messages/select_oc"
+
+    -# Rendering the form, even if there are no open OCs, makes display only shops possible
+    = render partial: "shop/products/form"
