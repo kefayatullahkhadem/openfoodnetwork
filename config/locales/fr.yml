@@ -2178,7 +2178,7 @@ fr:
   hubs_filter_delivery: "Livraison"
   hubs_filter_property: "Propriétés / labels"
   hubs_matches: "Vous voulez dire?"
-  hubs_intro: Passez commande près de chez vous
+  hubs_intro: Trouvez des points de distribution pour vous approvisionner près de chez vous.
   hubs_distance: Le plus près de
   hubs_distance_filter: "Afficher les boutiques près de %{location}"
   shop_changeable_orders_alert_html:

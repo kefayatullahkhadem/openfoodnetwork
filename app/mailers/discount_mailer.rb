@@ -6,6 +6,6 @@ class DiscountMailer < ApplicationMailer
         
         @user = user
         @discount = user.discount
-        mail(to:  @user.email, from: ENV['FRUITS_EMAIL_SUPPORT'], subject: 'Discount')
+        mail(to:  @user.email, from: ENV['FRUITS_EMAIL_SUPPORT'], subject: 'Avoir')
     end
 end

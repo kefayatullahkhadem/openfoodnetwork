@@ -23,7 +23,9 @@ class EnterprisesController < BaseController
 
     set_noindex_meta_tag
 
+    grouped_enterprises = Enterprise.grouped_enterprises_for_user(spree_current_user)
     @enterprise = current_distributor
+    @authorized = grouped_enterprises.include?(@enterprise)
   end
 
   def relatives
