@@ -1,4 +1,4 @@
-- unless @authrized
+- unless @authorized
   .content{ "darker-background" => true }
     .row.footer-pad
       .small-12.columns{ "data-controller": "login-modal" }
@@ -7,7 +7,7 @@
         %p
           = t('shop.messages.customer_required.require_customer_html', contact: link_to(t('.contact'), contact_us_path), enterprise: '')
 
-- else 
+- else
   .order-cycle-bar.hide-for-large-up
     = render partial: "shopping_shared/order_cycles"
 
