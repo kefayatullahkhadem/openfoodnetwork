@@ -1,7 +1,7 @@
 = cache_with_locale do
   .small-5.medium-3.large-3.columns.variant-quantity-column.text-right{"ng-if" => "::variant.product.group_buy"}
 
-    %button.add-variant{type: "button", ng: {if: "!variant.line_item.quantity", click: "addBulk(1)", disabled: "!canAdd(1)"}}
+    %button.add-variant{type: "button", ng: {if: "!variant.line_item.quantity", click: "addBulk(1)", disabled: current_spree_user.nil? ? "true" : "!canAdd(1)"}}
       {{ "js.shopfront.variant.add_to_cart" | t }}
     %button.bulk-buy.variant-quantity{type: "button", ng: {if: "variant.line_item.quantity", click: "addBulk(0)"}}>
       {{ variant.line_item.quantity }}

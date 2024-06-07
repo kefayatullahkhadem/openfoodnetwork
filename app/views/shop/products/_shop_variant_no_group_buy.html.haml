@@ -2,7 +2,7 @@
   .small-5.medium-3.large-3.columns.variant-quantity-column.text-right{"ng-if" => "::!variant.product.group_buy"}
 
     .variant-quantity-inputs{ng: {if: "variant.line_item.quantity == 0"}}
-      %button.add-variant{type: "button", ng: {click: "add(1)", disabled: "!canAdd(1)"}}
+      %button.add-variant{type: "button", ng: {click: "add(1)", disabled: current_spree_user.nil? ? "true" : "!canAdd(1)"}}
         {{ "js.shopfront.variant.add_to_cart" | t }}
 
     .variant-quantity-inputs{ng: {if: "variant.line_item.quantity != 0"}}
