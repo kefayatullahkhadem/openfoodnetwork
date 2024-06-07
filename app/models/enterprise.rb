@@ -229,7 +229,7 @@ class Enterprise < ApplicationRecord
   }
 
   def self.grouped_enterprises_for_user(user)
-    return Enterprise.none unless user
+    return Enterprise.all unless user
   
     user_enterprises = user.enterprises
     grouped_enterprises = Set.new

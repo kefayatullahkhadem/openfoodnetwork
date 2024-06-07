@@ -1,4 +1,4 @@
-- unless @authorized
+- if spree_current_user && !@authorized
   .content{ "darker-background" => true }
     .row.footer-pad
       .small-12.columns{ "data-controller": "login-modal" }
@@ -12,10 +12,12 @@
     = render partial: "shopping_shared/order_cycles"
 
   %div{"ng-controller" => "ProductsCtrl"}
-    - if no_open_order_cycles?
+    - if !spree_current_user
+      = render partial: "shop/messages/login_required"
+    - elsif no_open_order_cycles?
       = render partial: "shop/messages/closed_shop"      
     - else
       = render partial: "shop/messages/select_oc"
 
-    -# Rendering the form, even if there are no open OCs, makes display only shops possible
+    - # Rendering the form, even if there are no open OCs, makes display only shops possible
     = render partial: "shop/products/form"

@@ -1,0 +1,13 @@
+.content{ "darker-background" => true }
+  .row.footer-pad{ style: "padding-bottom: 1px;" }
+    .small-12.columns{ "data-controller": "login-modal" }
+      %strong
+        = t '.require_customer_login'
+      %p
+      - if spree_current_user.nil?
+        %p
+          = t('shop.messages.customer_required.require_login_link_html', login: ('<a data-action="click->login-modal#call">' + t('.login') + '</a>').html_safe)
+        %p
+          = t('shop.messages.customer_required.require_login_2_html', contact: link_to(t('.contact'), contact_us_path), enterprise: '')
+      - else
+        = t('shop.messages.customer_required.require_customer_html', contact: link_to(t('.contact'), '#contact'), enterprise: '')
