@@ -1828,6 +1828,7 @@ en:
         contact: "contact"
         require_customer_login: "Only approved customers can access this shop."
         require_login_link_html: "If you're already an approved customer, %{login} to proceed."
+        visitor_link_html: "%{login} or %{inscription} you to be able to place an order."
         require_login_2_html: "Want to start shopping here? Please %{contact} %{enterprise} and ask about joining."
         require_customer_html: "If you'd like to start shopping here, please %{contact} %{enterprise} to ask about joining."
       select_oc:
