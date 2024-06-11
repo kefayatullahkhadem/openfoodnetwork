@@ -11,6 +11,10 @@
     background-color: $cookies-banner-button-background-color;
   }
 
+  .cookies-banner > div {
+    padding-bottom: 50px;
+  }
+  
   p {
     color: $cookies-banner-text-color;
     font-size: .75rem;
