@@ -22,11 +22,18 @@ module Spree
       authenticate_spree_user!
 
       if spree_user_signed_in?
-        flash[:success] = t('devise.success.logged_in_succesfully')
-
-        render cable_ready: cable_car.redirect_to(
-          url: return_url_or_default(after_sign_in_path_for(spree_current_user))
-        )
+        if spree_current_user.enterprises.empty?
+          sign_out spree_current_user
+          render status: :unauthorized, cable_ready: cable_car.inner_html(
+            "#login-feedback",
+            partial("layouts/alert", locals: { type: "alert", message: t('devise.failure.no_shop_assigned') })
+          )
+        else
+          flash[:success] = t('devise.success.logged_in_succesfully')
+          render cable_ready: cable_car.redirect_to(
+            url: return_url_or_default(after_sign_in_path_for(spree_current_user))
+          )
+        end
       else
         render status: :unauthorized, cable_ready: cable_car.inner_html(
           "#login-feedback",
