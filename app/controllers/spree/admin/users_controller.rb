@@ -13,16 +13,9 @@ module Spree
                                         :generate_api_key, :clear_api_key]
 
       def index
-        @pagy, @users = pagy(@collection, items: params[:per_page] || 15)
-        
-        respond_to do |format|
+        respond_with(@collection) do |format|
           format.html
-          format.json do
-            render json: { 
-              pagy: pagy_metadata(@pagy), 
-              users_html: render_to_string(partial: "spree/admin/users/table", locals: { pagy: @pagy, users: @users }) 
-            }
-          end
+          format.json { render json: json_data }
         end
       end
 

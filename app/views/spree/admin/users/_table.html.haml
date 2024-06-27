@@ -35,9 +35,8 @@
           = link_to_delete user, no_text: true
           = link_to edit_object_url(user), class: 'edit-user' do
             %i.icon-pencil
-
-- if pagy&.count&.positive?
-  = render partial: "admin/shared/stimulus_pagination", locals: { pagy: pagy }
+- _with_routes Spree::Core::Engine.routes do
+  = render partial: 'admin/shared/pagy_links', locals: { pagy: pagy }
 
 - content_for :sidebar_title do
   = t(".search")
