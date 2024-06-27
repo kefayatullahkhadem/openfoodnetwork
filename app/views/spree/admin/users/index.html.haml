@@ -3,52 +3,14 @@
 - content_for :page_actions do
   %li
     = button_link_to t(".new_user"), new_object_url, icon: "icon-plus", id: "admin_new_user_link"
-
 = render "admin/shared/users_sub_menu"
+.row.index-controls
+  %div{ style: "display: flex; justify-content: space-between;" }
+  = form_with url: spree.admin_users_url, id: "users_form", method: :get, data: { remote: true, "search-target": "form" } do
+    = hidden_field_tag :page, 1, class: "page"
+    = hidden_field_tag :per_page, 15, class: "per-page"
+    .per-page.right
+      = render partial: 'admin/shared/stimulus_page_controls', locals: { pagy: @pagy }
 
-%table#listing_users.index
-  %colgroup
-    %col{ style: "width: 25%" }
-    %col{ style: "width: 25%" }
-    %col{ style: "width: 20%" }
-    %col{ style: "width: 15%" }
-  %thead
-    %tr
-      %th= sort_link [:spree, @search], :email, t(".user"), {}, {title: "users_email_title"}
-      %th= sort_link [:spree, @search], :name, t(".name"), {}, {title: "users_email_title"}
-      %th= sort_link [:spree, @search], :phone, t("registration.steps.contact.phone_field"), {}, {title: "users_email_title"}
-      %th= sort_link [:spree, @search], :enterprise_limit, t(".enterprise_limit")
-      %th= sort_link [:spree, @search], :shops, t(".shops_title")
-      %th.actions
-  %tbody
-    - @users.each do |user|
-      - # HAML seems to have a bug that it can't parse `class cycle('odd', 'even')` on the element.
-      - # So we assign it first:
-      - row_class = cycle("odd", "even")
-      %tr{id: spree_dom_id(user), class: row_class}
-        %td.user_email= link_to user.email, edit_object_url(user)
-        %td.user_phone= user.name
-        %td.user_phone= user.phone
-        %td.user_enterprise_limit= user.enterprise_limit
-        %td.user_shops
-          %select{name: "enterprises"}
-            - user.enterprises.each do |enterprise|
-              %option{value: enterprise.id}= enterprise.name
-        %td.actions
-          = link_to_delete user, no_text: true
-          = link_to edit_object_url(user), class: 'edit-user' do
-            %i.icon-pencil
-- _with_routes Spree::Core::Engine.routes do
-  = render partial: 'admin/shared/pagy_links', locals: { pagy: @pagy }
-
-- content_for :sidebar_title do
-  = t(".search")
-- content_for :sidebar do
-  .box.align-center
-    = search_form_for [:admin, @search] do |f|
-      .field
-        = f.label t(".email")
-        %br
-        = f.text_field :email_cont, class: "fullwidth"
-      %div
-        = button t(".search"), "icon-search"
+#users-index
+  = render partial: "users", locals: { pagy: @pagy, users: @users }

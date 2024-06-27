@@ -16,6 +16,10 @@ module Spree
         respond_with(@collection) do |format|
           format.html
           format.json { render json: json_data }
+          format.js { render cable_ready: cable_car.inner_html(
+            "#users-index",
+            partial("spree/admin/users/users", locals: { pagy: @pagy, users: @collection })
+          ) }
         end
       end
 
@@ -80,7 +84,9 @@ module Spree
             limit(params[:limit] || 100)
         else
           @search = Spree::User.ransack(params[:q])
-          @pagy, @collection = pagy(@search.result, items: Spree::Config[:admin_products_per_page])
+          result = @search.result
+          @pagy, @collection = pagy(result, items: params[:per_page]&.to_i || Spree::Config[:admin_products_per_page])
+          binding.pry if params[:per_page].present?
           @collection
         end
       end
