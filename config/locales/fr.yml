@@ -200,7 +200,7 @@ fr:
           Email / mot de passe incorrect.
           Créez votre compte ou réinitialisez votre mot de passe.
       unconfirmed: "Veuillez valider le lien envoyé par email pour pouvoir continuer."
-      no_shop_assigned: "No shop assigned to you"
+      no_shop_assigned: "Aucune boutique ne vous est attribuée"
       already_registered: "Cet email est déjà associé à un utilisateur et a déjà été validé. Veuillez vous connecter pour continuer, ou utiliser un autre email."
     success:
       logged_in_succesfully: "Vous êtes désormais connecté !"
