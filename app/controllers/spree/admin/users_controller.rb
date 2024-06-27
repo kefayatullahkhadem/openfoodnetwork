@@ -13,13 +13,16 @@ module Spree
                                         :generate_api_key, :clear_api_key]
 
       def index
-        respond_with(@collection) do |format|
+        @pagy, @users = pagy(@collection, items: params[:per_page] || 15)
+        
+        respond_to do |format|
           format.html
-          format.json { render json: json_data }
-          format.js { render cable_ready: cable_car.inner_html(
-            "#users-index",
-            partial("spree/admin/users/users", locals: { pagy: @pagy, users: @collection })
-          ) }
+          format.json do
+            render json: { 
+              pagy: pagy_metadata(@pagy), 
+              users_html: render_to_string(partial: "spree/admin/users/table", locals: { pagy: @pagy, users: @users }) 
+            }
+          end
         end
       end
 
@@ -69,7 +72,7 @@ module Spree
         return @collection if @collection.present?
 
         if request.xhr? && params[:q].present?
-          @collection = Spree::User.
+          result = Spree::User.
             includes(:bill_address, :ship_address).
             where("spree_users.email #{LIKE} :search
                     OR (spree_addresses.firstname #{LIKE} :search
@@ -82,14 +85,25 @@ module Spree
                       AND spree_addresses.id = spree_users.ship_address_id)",
                   search: "#{params[:q].strip}%").
             limit(params[:limit] || 100)
+      
+          if params[:q][:enterprise_id_in].present?
+            result = result.joins(:enterprises).where('enterprises.id IN (?)', params[:q][:enterprise_id_in])
+          end
+      
+          @collection = result
         else
           @search = Spree::User.ransack(params[:q])
           result = @search.result
+      
+          if params[:q] && params[:q][:enterprise_id_in].present?
+            result = result.joins(:enterprises).where('enterprises.id IN (?)', params[:q][:enterprise_id_in])
+          end
+      
           @pagy, @collection = pagy(result, items: params[:per_page]&.to_i || Spree::Config[:admin_products_per_page])
-          binding.pry if params[:per_page].present?
-          @collection
         end
-      end
+      
+        @collection
+      end      
 
       private
 

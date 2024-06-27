@@ -4,13 +4,6 @@
   %li
     = button_link_to t(".new_user"), new_object_url, icon: "icon-plus", id: "admin_new_user_link"
 = render "admin/shared/users_sub_menu"
-.row.index-controls
-  %div{ style: "display: flex; justify-content: space-between;" }
-  = form_with url: spree.admin_users_url, id: "users_form", method: :get, data: { remote: true, "search-target": "form" } do
-    = hidden_field_tag :page, 1, class: "page"
-    = hidden_field_tag :per_page, 15, class: "per-page"
-    .per-page.right
-      = render partial: 'admin/shared/stimulus_page_controls', locals: { pagy: @pagy }
 
-#users-index
-  = render partial: "users", locals: { pagy: @pagy, users: @users }
+= form_with url: spree.admin_users_path, method: :get, local: true, data: { search_target: "form" } do |f|
+  = render partial: "table", locals: { pagy: @pagy, users: @users }

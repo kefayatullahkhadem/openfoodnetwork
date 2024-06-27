@@ -1,3 +1,8 @@
+.row.index-controls
+  %div{ style: "display: flex; justify-content: space-between;" }
+    .per-page.right
+      = render partial: 'admin/shared/stimulus_page_controls', locals: { pagy: pagy }
+
 %table#listing_users.index
   %colgroup
     %col{ style: "width: 25%" }
@@ -30,8 +35,9 @@
           = link_to_delete user, no_text: true
           = link_to edit_object_url(user), class: 'edit-user' do
             %i.icon-pencil
-- _with_routes Spree::Core::Engine.routes do
-  = render partial: 'admin/shared/pagy_links', locals: { pagy: pagy }
+
+- if pagy&.count&.positive?
+  = render partial: "admin/shared/stimulus_pagination", locals: { pagy: pagy }
 
 - content_for :sidebar_title do
   = t(".search")
@@ -42,5 +48,11 @@
         = f.label t(".email")
         %br
         = f.text_field :email_cont, class: "fullwidth"
+      .field
+        = f.label t(".shops")
+        %br
+        = select_tag "q[enterprise_id_in]",
+          options_for_select(Enterprise.order(:name).map { |e| [e.name, e.id] }, params.dig(:q, :enterprise_id_in)),
+          { class: "fullwidth", multiple: true, data: { controller: "tom-select", "tom-select-options-value": { plugins: ['remove_button'], maxItems: nil } } }
       %div
         = button t(".search"), "icon-search"
