@@ -65,7 +65,7 @@ module Spree
         return @collection if @collection.present?
 
         if request.xhr? && params[:q].present?
-          @collection = Spree::User.
+          result = Spree::User.
             includes(:bill_address, :ship_address).
             where("spree_users.email #{LIKE} :search
                     OR (spree_addresses.firstname #{LIKE} :search
@@ -78,12 +78,25 @@ module Spree
                       AND spree_addresses.id = spree_users.ship_address_id)",
                   search: "#{params[:q].strip}%").
             limit(params[:limit] || 100)
+      
+          if params[:q][:enterprise_id_in].present?
+            result = result.joins(:enterprises).where('enterprises.id IN (?)', params[:q][:enterprise_id_in])
+          end
+      
+          @collection = result
         else
           @search = Spree::User.ransack(params[:q])
-          @pagy, @collection = pagy(@search.result, items: Spree::Config[:admin_products_per_page])
-          @collection
+          result = @search.result
+      
+          if params[:q] && params[:q][:enterprise_id_in].present?
+            result = result.joins(:enterprises).where('enterprises.id IN (?)', params[:q][:enterprise_id_in])
+          end
+      
+          @pagy, @collection = pagy(result, items: params[:per_page]&.to_i || Spree::Config[:admin_products_per_page])
         end
-      end
+      
+        @collection
+      end      
 
       private
 

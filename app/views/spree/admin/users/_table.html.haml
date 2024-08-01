@@ -1,0 +1,57 @@
+.row.index-controls
+  %div{ style: "display: flex; justify-content: space-between;" }
+    .per-page.right
+      = render partial: 'admin/shared/stimulus_page_controls', locals: { pagy: pagy }
+
+%table#listing_users.index
+  %colgroup
+    %col{ style: "width: 25%" }
+    %col{ style: "width: 25%" }
+    %col{ style: "width: 20%" }
+    %col{ style: "width: 15%" }
+  %thead
+    %tr
+      %th= sort_link [:spree, @search], :email, t(".user"), {}, {title: "users_email_title"}
+      %th= sort_link [:spree, @search], :name, t(".name"), {}, {title: "users_email_title"}
+      %th= sort_link [:spree, @search], :phone, t("registration.steps.contact.phone_field"), {}, {title: "users_email_title"}
+      %th= sort_link [:spree, @search], :enterprise_limit, t(".enterprise_limit")
+      %th= sort_link [:spree, @search], :shops, t(".shops_title")
+      %th.actions
+  %tbody
+    - users.each do |user|
+      - # HAML seems to have a bug that it can't parse `class cycle('odd', 'even')` on the element.
+      - # So we assign it first:
+      - row_class = cycle("odd", "even")
+      %tr{id: spree_dom_id(user), class: row_class}
+        %td.user_email= link_to user.email, edit_object_url(user)
+        %td.user_phone= user.name
+        %td.user_phone= user.phone
+        %td.user_enterprise_limit= user.enterprise_limit
+        %td.user_shops
+          %select{name: "enterprises"}
+            - user.enterprises.each do |enterprise|
+              %option{value: enterprise.id}= enterprise.name
+        %td.actions
+          = link_to_delete user, no_text: true
+          = link_to edit_object_url(user), class: 'edit-user' do
+            %i.icon-pencil
+- _with_routes Spree::Core::Engine.routes do
+  = render partial: 'admin/shared/pagy_links', locals: { pagy: pagy }
+
+- content_for :sidebar_title do
+  = t(".search")
+- content_for :sidebar do
+  .box.align-center
+    = search_form_for [:admin, @search] do |f|
+      .field
+        = f.label t(".email")
+        %br
+        = f.text_field :email_cont, class: "fullwidth"
+      .field
+        = f.label t(".shops")
+        %br
+        = select_tag "q[enterprise_id_in]",
+          options_for_select(Enterprise.order(:name).map { |e| [e.name, e.id] }, params.dig(:q, :enterprise_id_in)),
+          { class: "fullwidth", multiple: true, data: { controller: "tom-select", "tom-select-options-value": { plugins: ['remove_button'], maxItems: nil } } }
+      %div
+        = button t(".search"), "icon-search"
